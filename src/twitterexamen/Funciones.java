@@ -36,62 +36,27 @@ public class Funciones {
     }
     
     /**
-     * Aqui enviara un mensaje por twitter a una cuenta especificada
-     * @param Destinatario Es la cuenta a la que queremos enviarle el mensaje
-     * @param Mensaje Es el mensaje que queremos enviar
-     */
-    public void enviarMensaje(String Destinatario, String Mensaje) {
-        DirectMessage message;
-        try {
-            message = twitter.sendDirectMessage(Destinatario, Mensaje);
-            System.out.println("Sent: " + message.getText() + " to @" + message.getRecipientScreenName());
-        } catch (TwitterException ex) {
-            System.out.println("Error al twittear");
-        }
-    }
+     * Este es el metodo que lee el fichero llamado twitter4j.properties y lo ejecuta
+     * En dicho archivo tiene que contener exactamente los mismos parametros que el metodo conectar
+     * Es lo mismo que el metodo conectar pero guardado en un fichero de texto
+     */ 
+     
+    public void conectarViaProperties() {
 
-    /**
-     * Aqui nos mostrara todos los twitts me nosotros tenemos en el inicio de twitter
-     */
-    public void lineaTiempo() {
         try {
-            Paging pagina = new Paging();
-            pagina.setCount(40);
-            ResponseList listado = twitter.getHomeTimeline(pagina);
-            for (int i = 0; i < listado.size(); i++) {
-                System.out.println(listado.get(i).toString());
-            }
-        } catch (TwitterException ex) {
-            System.out.println("Error al ver la linea de tiempo");
+            Twitter twitter = new TwitterFactory().getInstance();
+            User user = twitter.verifyCredentials();
+            List statuses = twitter.getHomeTimeline();
+            System.out.println("Showing @" + user.getScreenName() + "'s home timeline.");
+            
+        } catch (TwitterException te) {
+            te.printStackTrace();
+            System.out.println("Failed to get timeline: " + te.getMessage());
+            System.exit(-1);
         }
+
     }
     
-    /**
-     * Aqui podremos lanzar un mensaje por twitter
-     * @param Mensaje Es el mensaje que queremos poner como estado
-     */
-    public void twittear(String Mensaje) {
-        try {
-            twitter.updateStatus(Mensaje);
-        } catch (TwitterException ex) {
-            System.out.println("Error post");
-        }
-    }
     
-    /**
-     * Aqui buscaremos por un twitt especificado  
-     * @param Twit Es el twitt que queremos buscar siempre empieza por #
-     */
-    public void buscarTwit(String Twit) {
-        try {
-            Query query = new Query(Twit);
-            QueryResult result = twitter.search(query);
-            for (Status status : result.getTweets()) {
-                System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
-            }
-        } catch (TwitterException ex) {
-            System.out.println("Error al buscar");
-        }
-    }
 
 }
