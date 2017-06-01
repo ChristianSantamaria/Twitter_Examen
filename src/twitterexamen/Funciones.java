@@ -23,7 +23,14 @@ public class Funciones {
      * la cual es necesaria para los siguientes metodos
      */
     public void conectar() {
-
+        ConfigurationBuilder cb = new ConfigurationBuilder();
+        cb.setDebugEnabled(true)
+                .setOAuthConsumerKey("x")
+                .setOAuthConsumerSecret("x")
+                .setOAuthAccessToken("x")
+                .setOAuthAccessTokenSecret("x");
+        TwitterFactory tf = new TwitterFactory(cb.build());
+        twitter = tf.getInstance();
         
         
     }
